@@ -15,7 +15,8 @@
 	"packageManager": "pnpm@10.30.0",
 	"dependencies": {
 		"@fintrack-pro/types": "workspace:*",
-		"fastify": "^5.8.2"
+		"fastify": "^5.8.2",
+		"@fintrack-pro/env": "workspace:*"
 	},
 	"devDependencies": {
 		"@fintrack-pro/tsconfig": "workspace:*",

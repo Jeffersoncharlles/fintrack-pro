@@ -20,6 +20,9 @@ importers:
 
   apps/api-gateway:
     dependencies:
+      '@fintrack-pro/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@fintrack-pro/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -145,6 +148,9 @@ importers:
       '@fintrack-pro/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@types/node':
+        specifier: ^24.12.0
+        version: 24.12.0
       typescript:
         specifier: ^5.7.0
         version: 5.9.3

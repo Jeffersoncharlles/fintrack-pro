@@ -73,10 +73,7 @@ pnpm dev
 
 ## 📈 Roadmap
 
-- [ ] Idempotência nas transações
-- [ ] Autenticação JWT compartilhada entre serviços
-- [ ] Monitoramento com Prometheus e Grafana
-- [ ] Serviço em Go ou Rust para processamento de alto volume
+
 
 ---
 
