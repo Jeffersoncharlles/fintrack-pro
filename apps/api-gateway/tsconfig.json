@@ -1,0 +1,10 @@
+{
+	"extends": "@fintrack-pro/tsconfig/base.json",
+	"include": ["src/**/*"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	}
+}
