@@ -8,7 +8,6 @@ pre-commit:
 pre-push:
   commands:
     validate:
-      glob: "*.{ts,tsx}"
       run: pnpm typecheck
     lint:
       glob: "*.{ts,tsx}"

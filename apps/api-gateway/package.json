@@ -1,25 +1,27 @@
 {
-	"name": "api-gateway",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"dev": "tsx watch src/index.ts",
-		"build": "tsc -p tsconfig.node.json",
-		"lint": "eslint . --ext .ts,.tsx",
-		"format": "biome format --write ."
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.30.0",
-	"dependencies": {
-		"@fintrack-pro/types": "workspace:*",
-		"fastify": "^5.8.2",
-		"@fintrack-pro/env": "workspace:*"
-	},
-	"devDependencies": {
-		"@fintrack-pro/tsconfig": "workspace:*",
-		"tsx": "^4.21.0"
-	}
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.node.json",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "biome format --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.0",
+  "dependencies": {
+    "@fintrack-pro/types": "workspace:*",
+    "fastify": "^5.8.2",
+    "@fintrack-pro/env": "workspace:*"
+  },
+  "devDependencies": {
+    "@fintrack-pro/tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "tsx": "^4.21.0"
+  }
 }
