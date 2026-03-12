@@ -1,21 +1,22 @@
 {
-	"name": "fintrack-pro",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"dev": "turbo dev",
-		"build": "turbo build",
-		"lint": "turbo lint",
-		"format": "biome format --write ."
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.30.0",
-	"devDependencies": {
-		"@biomejs/biome": "^2.4.6",
-		"lefthook": "^2.1.4",
-		"turbo": "^2.8.16"
-	}
+  "name": "fintrack-pro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.30.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "lefthook": "^2.1.4",
+    "turbo": "^2.8.16"
+  }
 }
