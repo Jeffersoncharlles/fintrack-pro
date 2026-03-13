@@ -1,6 +1,7 @@
 {
-	"extends": "@fintrack-pro/tsconfig/base.json",
+	"extends": "@fintrack-pro/tsconfig/node.json",
 	"compilerOptions": {
+		"noEmit": true,
 		"paths": {
 			"@/*": ["./src/*"]
 		}

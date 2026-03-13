@@ -1,0 +1,12 @@
+{
+  "extends": "@fintrack-pro/tsconfig/node.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "drizzle.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

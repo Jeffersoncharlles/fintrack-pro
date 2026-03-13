@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "turbo dev",
+    "dev:apps": "pnpm -r --filter \"./apps/**\" --stream run --if-present dev",
     "build": "turbo build",
+    "build:apps": "pnpm -r --filter \"./apps/**\" run --if-present build",
     "lint": "turbo lint",
-    "format": "biome format --write .",
-    "typecheck": "pnpm -r --filter \"./apps/**\" run --if-present typecheck && pnpm -r --filter \"./packages/**\" run --if-present typecheck"
+    "lint:fix": "turbo lint:fix",
+    "typecheck": "turbo typecheck"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
   "packageManager": "pnpm@10.30.0",
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "@fintrack-pro/biome-config": "workspace:*",
     "lefthook": "^2.1.4",
     "turbo": "^2.8.16"
   }

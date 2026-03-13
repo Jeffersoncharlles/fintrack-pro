@@ -23,3 +23,13 @@ export interface CreateUserFullDTO {
   createdAt: string
   updatedAt: string
 }
+
+export const KAFKA_TOPICS = {
+  TRANSACTION_CREATED: 'transaction-created',
+  TRANSACTION_UPDATED: 'transaction-updated',
+  WALLET_BALANCE_UPDATED: 'wallet-balance-updated',
+} as const
+
+export const KAFKA_KEYS = {
+  TRANSACTION: 'transaction-key',
+} as const

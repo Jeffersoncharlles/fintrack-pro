@@ -1,26 +1,31 @@
 {
-  "name": "transaction-service",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "build": "tsc -p tsconfig.node.json",
-    "lint": "eslint . --ext .ts,.tsx",
-    "format": "biome format --write ."
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.30.0",
-  "dependencies": {
-    "@fintrack-pro/types": "workspace:*",
-    "fastify": "^5.8.2"
-  },
-  "devDependencies": {
-    "@fintrack-pro/tsconfig": "workspace:*",
-    "typescript": "^5.9.3",
-    "tsx": "^4.21.0"
-  }
+	"name": "transaction-service",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./dist/server.js",
+	"scripts": {
+		"dev": "tsx watch src/server.ts",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"build": "tsc -p tsconfig.node.json",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.30.0",
+	"dependencies": {
+		"@fintrack-pro/types": "workspace:*",
+		"@fintrack-pro/env": "workspace:*",
+		"fastify": "^5.8.2",
+		"kafkajs": "^2.2.4"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.6",
+		"@fintrack-pro/biome-config": "workspace:*",
+		"@fintrack-pro/tsconfig": "workspace:*",
+		"@types/node": "^24.12.0",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	}
 }

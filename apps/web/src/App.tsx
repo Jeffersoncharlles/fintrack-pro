@@ -1,5 +1,21 @@
-function App() {
-	return <h1 className="text-3xl text-blue-500">Hello, Vite + React!</h1>;
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({
+	routeTree,
+	context: {
+		auth: undefined!,
+	},
+});
+
+declare module "@tanstack/react-router" {
+	interface Register {
+		router: typeof router;
+	}
 }
 
-export default App;
+const auth = true;
+
+export const App = () => {
+	return <RouterProvider router={router} context={{ auth }} />;
+};

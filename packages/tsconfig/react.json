@@ -1,14 +1,14 @@
 {
-	"extends": "./base.json",
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"lib": ["ES2022", "DOM", "DOM.Iterable"],
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"useDefineForClassFields": true,
-		"allowImportingTsExtensions": true,
-		"verbatimModuleSyntax": true,
-		"noEmit": true,
-		"types": ["vite/client"]
-	}
+  "extends": "./base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "useDefineForClassFields": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "types": ["vite/client"]
+  }
 }

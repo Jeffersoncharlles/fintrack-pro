@@ -6,14 +6,16 @@
   "types": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "biome lint .",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "format": "biome format --write ."
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
+    "dotenv": "^17.2.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
     "@fintrack-pro/tsconfig": "workspace:*",
     "@types/node": "^24.12.0",
     "typescript": "^5.7.0"

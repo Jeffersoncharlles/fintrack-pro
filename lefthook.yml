@@ -1,14 +1,15 @@
 pre-commit:
   commands:
     check:
-      run: pnpm biome format --write {staged_files}
-      glob: "*.{js,ts,jsx,tsx,json}"
+      run: pnpm biome check --write --no-errors-on-unmatched {staged_files}
+      glob: "*.{js,cjs,mjs,ts,jsx,tsx,json,css,md}"
       stage_fixed: true
 
 pre-push:
+  parallel: true
   commands:
     validate:
       run: pnpm typecheck
-    lint:
-      glob: "*.{ts,tsx}"
-      run: pnpm biome lint {staged_files}
+    lint-check:
+      glob: "*.{js,cjs,mjs,ts,jsx,tsx,json,css}"
+      run: pnpm biome check --no-errors-on-unmatched {staged_files}

@@ -1,0 +1,10 @@
+{
+  "extends": ["./base.json"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noConsole": "off"
+      }
+    }
+  }
+}

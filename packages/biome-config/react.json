@@ -1,0 +1,27 @@
+{
+  "extends": ["./base.json"],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "nursery": {
+        "useSortedClasses": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off"
+      }
+    }
+  },
+  "javascript": {
+    "globals": ["React", "JSX"]
+  }
+}

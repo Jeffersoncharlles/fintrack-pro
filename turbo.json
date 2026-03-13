@@ -1,0 +1,33 @@
+{
+  "globalDependencies": ["biome.json", "packages/biome-config/**"],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "tsconfig.json",
+        "tsconfig.*.json",
+        "biome.json"
+      ],
+      "outputs": ["dist/**", "build/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "biome.json"]
+    },
+    "lint:fix": {
+      "cache": false
+    },
+    "format": {
+      "cache": false
+    }
+  }
+}
