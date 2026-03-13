@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/auth-context";
 
 const authenticateFormDataSchema = z.object({
 	email: z.string().email(),
@@ -21,6 +23,8 @@ export type AuthenticateFormDataSchema = z.infer<
 >;
 
 export function AuthenticatePage() {
+	const { signIn } = useAuth();
+
 	const {
 		register,
 		handleSubmit,
@@ -33,11 +37,16 @@ export function AuthenticatePage() {
 		},
 	});
 
-	const handleFormSubmit = async (data: AuthenticateFormDataSchema) => {};
+	const handleFormSubmit = async (data: AuthenticateFormDataSchema) => {
+		const result = await signIn(data);
+		if (!result.success) {
+			toast.error(result.error || "Failed to authenticate");
+		}
+	};
 
 	return (
-		<main className="min-h-screen  px-4 py-10">
-			<Card>
+		<main className="min-h-screen w-full flex items-center justify-center px-4 py-10">
+			<Card className="w-full max-w-md rounded-2xl">
 				<CardHeader>
 					<CardTitle>Authenticate</CardTitle>
 					<CardDescription>

@@ -1,0 +1,12 @@
+import { api } from "@/lib/axios";
+
+interface UserProfile {
+	id: string;
+	name: string;
+	email: string;
+}
+export const me = async (): Promise<UserProfile | null> => {
+	const { data } = await api.get<UserProfile>("/me");
+
+	return data;
+};

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
+import id from "zod/v4/locales/id.js";
 
 const authenticateUserBodySchema = z.object({
 	email: z.string().email(),
@@ -23,7 +24,11 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 				body: authenticateUserBodySchema,
 				response: {
 					200: z.object({
-						token: z.string(),
+						user: z.object({
+							id: z.string().uuid(),
+							name: z.string().max(255),
+							email: z.string().email(),
+						}),
 						message: z.string(),
 					}),
 					401: z.object({
@@ -67,7 +72,14 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 					path: "/",
 					maxAge: 60 * 60 * 24 * 7, // 7 dias,
 				})
-				.send({ token, message: "Authentication successful" });
+				.send({
+					user: {
+						id: userExists.id,
+						name: userExists.name,
+						email: userExists.email,
+					},
+					message: "Authentication successful",
+				});
 		},
 	);
 };
