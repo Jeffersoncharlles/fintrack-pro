@@ -1,5 +1,3 @@
-import { CirclePlusIcon, MailIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
