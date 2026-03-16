@@ -9,6 +9,7 @@ import { walletsUserPixGenerate } from "./wallets-me-pix-generate";
 import { walletsMetricsChartData } from "./wallets-metrics-chart-data";
 import { walletsMetricsMonthlySummary } from "./wallets-metrics-monthly-summary";
 import { walletsPixResolve } from "./wallets-pix-resolve";
+import { walletsPixTransfer } from "./wallets-pix-transfer";
 
 export const routes: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 	app.register(auth, { prefix: "/auth/authenticate" });
@@ -24,4 +25,5 @@ export const routes: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 	});
 	app.register(walletsUserPixGenerate, { prefix: "/wallets/me/pix-generate" });
 	app.register(walletsPixResolve, { prefix: "/wallets/pix-resolve" });
+	app.register(walletsPixTransfer, { prefix: "/wallets/pix-transfer" });
 };

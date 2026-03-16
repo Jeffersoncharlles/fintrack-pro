@@ -11,6 +11,7 @@ import {
 	validatorCompiler,
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
+import { connectKafka } from "./lib/kafka";
 import { routes } from "./routes";
 
 const app = Fastify().withTypeProvider<ZodTypeProvider>();
@@ -55,6 +56,7 @@ app.register(routes);
 
 const start = async () => {
 	try {
+		await connectKafka();
 		await app.listen({ port: env.API_GATEWAY_PORT, host: "0.0.0.0" });
 	} catch (error) {
 		app.log.error(error);

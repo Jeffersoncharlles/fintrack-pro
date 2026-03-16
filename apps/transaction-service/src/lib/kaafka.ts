@@ -1,17 +1,14 @@
 import { env } from "@fintrack-pro/env";
-import { Kafka, Partitioners } from "kafkajs";
+import { Kafka } from "kafkajs";
 
 const kafka = new Kafka({
-	clientId: "fintrack-gateway",
+	clientId: "fintrack-transaction-service",
 	brokers: [env.KAFKA_BROKERS],
 });
 
-export const producer = kafka.producer({
-	createPartitioner: Partitioners.LegacyPartitioner,
-});
+export const consumer = kafka.consumer({ groupId: "transaction-group" });
 
 export async function connectKafka() {
-	await producer.connect();
-
-	console.log("📡 Kafka Producer: Connected");
+	await consumer.connect();
+	console.log("📥 Kafka Consumer: Connected");
 }

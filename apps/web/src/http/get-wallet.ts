@@ -2,7 +2,7 @@ import { api } from "@/lib/axios";
 
 interface GetWalletResponse {
 	walletId: string;
-	balance: string;
+	balance: number;
 	currency: string;
 }
 export const getWallet = async (): Promise<GetWalletResponse | null> => {

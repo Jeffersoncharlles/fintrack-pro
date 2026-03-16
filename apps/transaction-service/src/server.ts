@@ -1,26 +1,26 @@
-import { env } from "@fintrack-pro/env";
-import Fastify from "fastify";
-import { connectKafka, producer } from "./lib/kaafka";
-
-const app = Fastify({ logger: true });
-
-app.post("/transactions", async (request, reply) => {
-	const transaction = request.body; // O ideal é validar com Zod aqui!
-
-	await producer.send({
-		topic: "transaction-created",
-		messages: [{ value: JSON.stringify(transaction) }],
-	});
-
-	return reply.status(201).send({ message: "Transaction sent to queue" });
-});
+import { connectKafka, consumer } from "./lib/kaafka";
+import { processTransfer } from "./services/process-transfer";
 
 const start = async () => {
 	try {
 		await connectKafka();
-		await app.listen({ port: env.PORT, host: "0.0.0.0" });
+		await consumer.subscribe({
+			topic: "transfer.requested",
+			fromBeginning: true,
+		});
+
+		// 2. O Worker entra em modo de escuta
+		await consumer.run({
+			eachMessage: async ({ topic, partition, message }) => {
+				const payload = JSON.parse(message.value?.toString() || "{}");
+
+				console.log(`[EVENT] Mensagem recebida no tópico ${topic}`);
+
+				await processTransfer(payload);
+			},
+		});
 	} catch (err) {
-		app.log.error(err);
+		console.error("❌ Erro ao iniciar o Worker:", err);
 		process.exit(1);
 	}
 };

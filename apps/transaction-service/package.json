@@ -17,6 +17,7 @@
 	"dependencies": {
 		"@fintrack-pro/types": "workspace:*",
 		"@fintrack-pro/env": "workspace:*",
+		"@fintrack-pro/db": "workspace:*",
 		"fastify": "^5.8.2",
 		"kafkajs": "^2.2.4"
 	},

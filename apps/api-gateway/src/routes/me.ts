@@ -1,4 +1,4 @@
-import { db, eq, users } from "@fintrack-pro/db";
+import { db, eq, users, wallets } from "@fintrack-pro/db";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -18,6 +18,7 @@ export const me: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 						id: z.string().uuid(),
 						name: z.string(),
 						email: z.string().email(),
+						pixKey: z.string().nullable(),
 					}),
 					401: z.object({
 						message: z.string(),
@@ -30,13 +31,27 @@ export const me: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 		async (request: FastifyRequest, response: FastifyReply) => {
 			const userId = request.userId;
 
-			const [user] = await db.select().from(users).where(eq(users.id, userId));
+			const [result] = await db
+				.select({
+					id: users.id,
+					name: users.name,
+					email: users.email,
+					pixKey: wallets.pixKey,
+				})
+				.from(users)
+				.leftJoin(wallets, eq(wallets.userId, users.id))
+				.where(eq(users.id, userId));
 
-			if (!user) {
+			if (!result) {
 				return response.code(401).send({ message: "User not found" });
 			}
 
-			return response.send({ id: user.id, name: user.name, email: user.email });
+			return response.send({
+				id: result.id,
+				name: result.name,
+				email: result.email,
+				pixKey: result.pixKey ?? null,
+			});
 		},
 	);
 };

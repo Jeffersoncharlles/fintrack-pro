@@ -15,6 +15,7 @@ interface User {
 	id: string;
 	name: string;
 	email: string;
+	pixKey: string | null;
 }
 
 interface SignInCredentials {
@@ -78,8 +79,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	}: SignInCredentials): Promise<SignInResponse> {
 		const { user: loggedUser, error } = await auth({ email, password });
 		if (loggedUser) {
-			setUser(loggedUser);
-			queryClient.setQueryData(["profile"], loggedUser);
+			const normalizedUser: User = {
+				...loggedUser,
+				pixKey: null,
+			};
+
+			setUser(normalizedUser);
+			queryClient.setQueryData(["profile"], normalizedUser);
 			return { success: true };
 		}
 		return { success: false, error };
