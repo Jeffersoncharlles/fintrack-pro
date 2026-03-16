@@ -28,11 +28,6 @@ export function PixTransferPage() {
 	const formatCurrencyFromCents = useFormatCurrencyFromCents();
 	const amountDisplay = formatCurrencyFromCents(amountInCents);
 
-	// Debug: log quando a página é carregada
-	useEffect(() => {
-		console.log("[DEBUG] PixTransferPage loaded, user:", user);
-	}, [user]);
-
 	const {
 		data: receiver,
 		isFetching: isResolving,

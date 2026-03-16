@@ -27,8 +27,9 @@ app.register(fastifyCors, {
 app.register(fastifySwagger, {
 	openapi: {
 		info: {
-			title: "webhook-inspector API",
-			description: "API for capturing and inspecting webhooks requests",
+			title: "FinTrack.Pro API",
+			description:
+				"Api for FinTrack Pro application - manage your finances with ease",
 			version: "1.0.0",
 		},
 	},
