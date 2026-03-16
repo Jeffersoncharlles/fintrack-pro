@@ -21,17 +21,53 @@ function loadEnvFile() {
 
 loadEnvFile()
 
-const parseBoolean = (value: string | undefined, fallback: boolean) => {
-  if (value === undefined) return fallback
-  return value === 'true' || value === '1'
+const parseBoolean = (value: unknown, fallback: boolean) => {
+  if (value === undefined || value === null) return fallback
+  if (typeof value === 'boolean') return value
+  if (typeof value !== 'string') return fallback
+
+  const normalized = value.trim().toLowerCase()
+  if (normalized === 'true' || normalized === '1') return true
+  if (normalized === 'false' || normalized === '0') return false
+  return fallback
 }
 
 const resolveKafkaBrokers = () => {
   return (
     process.env.KAFKA_BROKERS ??
     process.env.CLOUDKARAFKA_BROKERS ??
+    process.env.KAFKACLUSTER_BROKERS ??
     'localhost:9093'
   )
+}
+
+const resolveKafkaSaslUsername = () => {
+  return (
+    process.env.KAFKA_SASL_USERNAME ??
+    process.env.CLOUDKARAFKA_USERNAME ??
+    process.env.KAFKACLUSTER_USERNAME
+  )
+}
+
+const resolveKafkaSaslPassword = () => {
+  return (
+    process.env.KAFKA_SASL_PASSWORD ??
+    process.env.CLOUDKARAFKA_PASSWORD ??
+    process.env.KAFKACLUSTER_PASSWORD
+  )
+}
+
+const resolveKafkaSaslMechanism = () => {
+  if (process.env.KAFKA_SASL_MECHANISM) {
+    return process.env.KAFKA_SASL_MECHANISM
+  }
+
+  // KafkaCluster exposes credentials for SCRAM-SHA-512 auth.
+  if (process.env.KAFKACLUSTER_USERNAME || process.env.KAFKACLUSTER_PASSWORD) {
+    return 'scram-sha-512'
+  }
+
+  return 'plain'
 }
 
 const envSchema = z.object({
@@ -45,18 +81,25 @@ const envSchema = z.object({
   // Kafka
   // ──────────────────────────────────────────
   KAFKA_BROKERS: z.string().default(resolveKafkaBrokers()),
-  KAFKA_SSL: z.boolean().default(parseBoolean(process.env.KAFKA_SSL, false)),
+  KAFKA_SSL: z
+    .preprocess((value) => parseBoolean(value, false), z.boolean())
+    .default(parseBoolean(process.env.KAFKA_SSL, false)),
   KAFKA_SASL_USERNAME: z
     .string()
     .optional()
-    .transform((value) => value ?? process.env.CLOUDKARAFKA_USERNAME),
+    .transform((value) => value ?? resolveKafkaSaslUsername()),
   KAFKA_SASL_PASSWORD: z
     .string()
     .optional()
-    .transform((value) => value ?? process.env.CLOUDKARAFKA_PASSWORD),
+    .transform((value) => value ?? resolveKafkaSaslPassword()),
   KAFKA_SASL_MECHANISM: z
     .enum(['plain', 'scram-sha-256', 'scram-sha-512'])
-    .default('plain'),
+    .default(
+      resolveKafkaSaslMechanism() as
+        | 'plain'
+        | 'scram-sha-256'
+        | 'scram-sha-512',
+    ),
   KAFKA_INTERNAL_BROKERS: z.string().default('kafka:29092'),
   ZOOKEEPER_CONNECT: z.string().default('localhost:2181'),
   CORS_ORIGIN: z.string().url().default('http://localhost:5173'),

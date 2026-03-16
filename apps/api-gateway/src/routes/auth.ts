@@ -1,10 +1,10 @@
 import { db, eq } from "@fintrack-pro/db";
 import { users } from "@fintrack-pro/db/src/schemas/users";
+import { env } from "@fintrack-pro/env";
 import bcrypt from "bcrypt";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import id from "zod/v4/locales/id.js";
 
 const authenticateUserBodySchema = z.object({
 	email: z.string().email(),
@@ -41,6 +41,7 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 			request: FastifyRequest<{ Body: AuthenticateUserBody }>,
 			response: FastifyReply,
 		) => {
+			const isProduction = env.NODE_ENV === "production";
 			const { email, password } = request.body;
 
 			const [userExists] = await db
@@ -68,6 +69,8 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 			return response
 				.setCookie("tokens", token, {
 					httpOnly: true,
+					secure: isProduction,
+					sameSite: isProduction ? "none" : "lax",
 					path: "/",
 					maxAge: 60 * 60 * 24 * 7, // 7 dias,
 				})

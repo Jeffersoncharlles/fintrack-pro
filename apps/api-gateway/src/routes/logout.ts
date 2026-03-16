@@ -1,3 +1,4 @@
+import { env } from "@fintrack-pro/env";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -21,9 +22,14 @@ export const logout: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 			},
 		},
 		async (request: FastifyRequest, response: FastifyReply) => {
+			const isProduction = env.NODE_ENV === "production";
 			try {
 				return response
-					.clearCookie("tokens", { path: "/" })
+					.clearCookie("tokens", {
+						path: "/",
+						secure: isProduction,
+						sameSite: isProduction ? "none" : "lax",
+					})
 					.send({ message: "Logout successful" });
 			} catch (error) {
 				request.log.error(error);
