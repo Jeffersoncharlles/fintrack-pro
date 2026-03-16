@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter web build && rm -rf dist && cp -R apps/web/dist dist",
+  "buildCommand": "pnpm --filter web build && rm -rf .vercel-dist-tmp && (test -d apps/web/dist && cp -R apps/web/dist .vercel-dist-tmp || cp -R dist .vercel-dist-tmp) && rm -rf dist && mv .vercel-dist-tmp dist",
   "outputDirectory": "dist",
   "devCommand": "pnpm --filter web dev",
   "framework": "vite"
