@@ -94,14 +94,38 @@ Depois, copie a `DATABASE_URL` gerada no app `fintrack-api-gateway` e replique n
 heroku config:set DATABASE_URL="<DATABASE_URL_DO_API_GATEWAY>" --app fintrack-transaction-service
 ```
 
-### 3) Provisionar Kafka
-
-No Heroku, use um add-on compatível (exemplo: CloudKarafka):
+Opcao sem custo de Postgres no Heroku: use Neon (ou outro Postgres externo) e configure a mesma URL nos dois apps:
 
 ```bash
-heroku addons:create cloudkarafka:lemur --app fintrack-api-gateway
-heroku addons:create cloudkarafka:lemur --app fintrack-transaction-service
+heroku config:set DATABASE_URL="<NEON_DATABASE_URL>" --app fintrack-api-gateway
+heroku config:set DATABASE_URL="<NEON_DATABASE_URL>" --app fintrack-transaction-service
 ```
+
+No script automatizado, voce pode passar a URL externa direto na execucao:
+
+```bash
+env NEON_DATABASE_URL="<NEON_DATABASE_URL>" fish ./script.sh
+```
+
+### 3) Provisionar Kafka
+
+No Heroku, primeiro descubra quais servicos e planos Kafka estao disponiveis para sua conta/regiao:
+
+```bash
+heroku addons:services | rg -i kafka
+heroku addons:plans heroku-kafka
+heroku addons:plans kafkacluster
+```
+
+Depois, crie o add-on com um plano valido no `fintrack-api-gateway` (exemplo com placeholder):
+
+```bash
+heroku addons:create kafkacluster:test --app fintrack-api-gateway
+# ou (pago)
+heroku addons:create heroku-kafka:basic-0 --app fintrack-api-gateway
+```
+
+Se seu provedor de Kafka nao expuser variaveis `KAFKA_*` automaticamente, configure manualmente nos dois apps:
 
 Se o add-on não injetar automaticamente as chaves esperadas, configure manualmente:
 
@@ -127,6 +151,34 @@ heroku config:set CORS_ORIGIN="https://<seu-projeto>.vercel.app" --app fintrack-
 ```
 
 O `PORT` é definido automaticamente pelo Heroku.
+
+### Script de deploy automatizado
+
+O arquivo [script.sh](script.sh) aceita estas envs de entrada:
+
+- `API_APP_NAME`
+- `WORKER_APP_NAME`
+- `CORS_ORIGIN_VALUE`
+- `NEON_DATABASE_URL`
+- `EXTERNAL_DATABASE_URL`
+- `NODE_ENV_OVERRIDE`
+- `JWT_SECRET_VALUE`
+- `KAFKA_ADDON_PLAN`
+- `KAFKA_BROKERS_VALUE`
+- `KAFKA_SASL_USERNAME_VALUE`
+- `KAFKA_SASL_PASSWORD_VALUE`
+- `KAFKA_SSL_VALUE`
+- `KAFKA_SASL_MECHANISM_VALUE`
+
+Exemplo completo com Neon + Kafka free:
+
+```bash
+env \
+  NEON_DATABASE_URL="<NEON_DATABASE_URL>" \
+  KAFKA_ADDON_PLAN="kafkacluster:test" \
+  CORS_ORIGIN_VALUE="https://<seu-front>.vercel.app" \
+  fish ./script.sh
+```
 
 ### 5) Configurar variáveis do Transaction Service no Heroku
 
