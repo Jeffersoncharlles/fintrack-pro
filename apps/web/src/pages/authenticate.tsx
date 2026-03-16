@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,6 +24,7 @@ export type AuthenticateFormDataSchema = z.infer<
 >;
 
 export function AuthenticatePage() {
+	const navigate = useNavigate();
 	const { signIn } = useAuth();
 
 	const {
@@ -42,6 +44,7 @@ export function AuthenticatePage() {
 		if (!result.success) {
 			toast.error(result.error || "Failed to authenticate");
 		}
+		navigate({ to: "/" });
 	};
 
 	return (
@@ -64,6 +67,11 @@ export function AuthenticatePage() {
 									type="email"
 									{...register("email")}
 								/>
+								{errors.email && (
+									<p className="text-sm text-red-500 mt-1">
+										{errors.email.message}
+									</p>
+								)}
 							</Field>
 							<Field>
 								<FieldLabel htmlFor="fieldgroup-password">Password</FieldLabel>
@@ -72,11 +80,16 @@ export function AuthenticatePage() {
 									type="password"
 									{...register("password")}
 								/>
+								{errors.password && (
+									<p className="text-sm text-red-500 mt-1">
+										{errors.password.message}
+									</p>
+								)}
 							</Field>
 
 							<Field orientation="horizontal">
 								<Button disabled={isSubmitting} type="submit">
-									SignIn
+									{isSubmitting ? "Authenticating..." : "Authenticate"}
 								</Button>
 							</Field>
 						</FieldGroup>

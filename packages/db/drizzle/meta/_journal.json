@@ -8,6 +8,13 @@
       "when": 1773348201537,
       "tag": "0000_fresh_victor_mancha",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773663129030,
+      "tag": "0001_strange_warhawk",
+      "breakpoints": true
     }
   ]
 }

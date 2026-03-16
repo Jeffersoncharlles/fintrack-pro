@@ -41,7 +41,6 @@ export const createUser: FastifyPluginAsyncZod = async (
 			response: FastifyReply,
 		) => {
 			const { email, password, name } = request.body;
-			const { jwtSign } = response;
 
 			const [existingUser] = await db
 				.select()
@@ -67,7 +66,10 @@ export const createUser: FastifyPluginAsyncZod = async (
 				return response.code(500).send({ message: "Failed to create user" });
 			}
 
-			const token = await jwtSign({ userId: newUser.id }, { expiresIn: "7d" });
+			const token = await response.jwtSign(
+				{ userId: newUser.id },
+				{ expiresIn: "7d" },
+			);
 
 			return response.code(201).send({ token });
 		},

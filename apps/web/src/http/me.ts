@@ -6,7 +6,7 @@ interface UserProfile {
 	email: string;
 }
 export const me = async (): Promise<UserProfile | null> => {
-	const { data } = await api.get<UserProfile>("/me");
+	const { data } = await api.get<UserProfile>("/auth/me");
 
 	return data;
 };

@@ -42,7 +42,6 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 			response: FastifyReply,
 		) => {
 			const { email, password } = request.body;
-			const { jwtSign } = response;
 
 			const [userExists] = await db
 				.select()
@@ -61,7 +60,7 @@ export const auth: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 				return response.code(401).send({ message: "Invalid credentials" });
 			}
 
-			const token = await jwtSign(
+			const token = await response.jwtSign(
 				{ userId: userExists.id },
 				{ expiresIn: "7d" },
 			);

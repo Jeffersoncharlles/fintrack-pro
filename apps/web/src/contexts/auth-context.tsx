@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, type ReactNode, useContext } from "react";
 import { auth } from "@/http/auth";
+import { logout } from "@/http/logout";
 import { me } from "@/http/me";
 import { queryClient } from "@/lib/react-query";
 
@@ -20,7 +21,7 @@ interface SignInResponse {
 	error?: string | null;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
 	user: User | null;
 	isAuthenticated: boolean;
 	signIn: (credentials: SignInCredentials) => Promise<SignInResponse>;
@@ -61,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 	async function signOut() {
 		try {
-			// await logout(); //todo: implementar logout na API e descomentar isso
+			await logout();
 		} finally {
 			queryClient.setQueryData(["profile"], null);
 		}
