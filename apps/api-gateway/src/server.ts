@@ -19,7 +19,7 @@ const app = Fastify().withTypeProvider<ZodTypeProvider>();
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 app.register(fastifyCors, {
-	origin: "http://localhost:5173",
+	origin: env.CORS_ORIGIN,
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	credentials: true,
 });
@@ -57,7 +57,7 @@ app.register(routes);
 const start = async () => {
 	try {
 		await connectKafka();
-		await app.listen({ port: env.API_GATEWAY_PORT, host: "0.0.0.0" });
+		await app.listen({ port: env.PORT, host: "0.0.0.0" });
 	} catch (error) {
 		app.log.error(error);
 		process.exit(1);

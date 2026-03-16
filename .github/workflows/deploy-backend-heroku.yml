@@ -1,0 +1,82 @@
+name: Deploy Backend to Heroku
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/api-gateway/**
+      - apps/transaction-service/**
+      - packages/**
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - .github/workflows/deploy-backend-heroku.yml
+  workflow_dispatch:
+
+jobs:
+  migrate-database:
+    name: Run Drizzle Migration
+    runs-on: ubuntu-latest
+    if: ${{ secrets.HEROKU_DATABASE_URL != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply database schema
+        env:
+          DATABASE_URL: ${{ secrets.HEROKU_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          KAFKA_BROKERS: localhost:9093
+          CORS_ORIGIN: http://localhost:5173
+        run: pnpm --filter @fintrack-pro/db db:push
+
+  deploy-api-gateway:
+    name: Deploy API Gateway
+    runs-on: ubuntu-latest
+    needs: migrate-database
+    if: ${{ always() && (needs.migrate-database.result == 'success' || needs.migrate-database.result == 'skipped') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy container to Heroku
+        uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API_GATEWAY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true
+          appdir: "."
+          dockerfile: "apps/api-gateway/Dockerfile"
+          docker_heroku_process_type: web
+
+  deploy-transaction-service:
+    name: Deploy Transaction Service
+    runs-on: ubuntu-latest
+    needs: migrate-database
+    if: ${{ always() && (needs.migrate-database.result == 'success' || needs.migrate-database.result == 'skipped') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy container to Heroku
+        uses: akhileshns/heroku-deploy@v3.14.15
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_TRANSACTION_SERVICE }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true
+          appdir: "."
+          dockerfile: "apps/transaction-service/Dockerfile"
+          docker_heroku_process_type: worker

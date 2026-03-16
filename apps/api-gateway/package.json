@@ -5,6 +5,7 @@
 	"main": "server.js",
 	"scripts": {
 		"dev": "tsx watch src/server.ts",
+		"start": "tsx src/server.ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"build": "tsc -p tsconfig.node.json",
 		"lint": "biome check .",

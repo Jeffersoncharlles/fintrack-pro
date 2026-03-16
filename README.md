@@ -73,6 +73,90 @@ pnpm dev
 
 ## 📈 Roadmap
 
+## ☁️ Deploy (Heroku + Vercel + GitHub Actions)
+
+### 1) Criar apps no Heroku
+
+```bash
+heroku create fintrack-api-gateway
+heroku create fintrack-transaction-service
+```
+
+### 2) Provisionar PostgreSQL (Heroku Postgres)
+
+```bash
+heroku addons:create heroku-postgresql:essential-0 --app fintrack-api-gateway
+```
+
+Depois, copie a `DATABASE_URL` gerada no app `fintrack-api-gateway` e replique no `fintrack-transaction-service` caso os dois serviços usem o mesmo banco:
+
+```bash
+heroku config:set DATABASE_URL="<DATABASE_URL_DO_API_GATEWAY>" --app fintrack-transaction-service
+```
+
+### 3) Provisionar Kafka
+
+No Heroku, use um add-on compatível (exemplo: CloudKarafka):
+
+```bash
+heroku addons:create cloudkarafka:lemur --app fintrack-api-gateway
+heroku addons:create cloudkarafka:lemur --app fintrack-transaction-service
+```
+
+Se o add-on não injetar automaticamente as chaves esperadas, configure manualmente:
+
+```bash
+heroku config:set KAFKA_BROKERS="<HOST:PORT>" --app fintrack-api-gateway
+heroku config:set KAFKA_BROKERS="<HOST:PORT>" --app fintrack-transaction-service
+
+heroku config:set KAFKA_SSL=true --app fintrack-api-gateway
+heroku config:set KAFKA_SSL=true --app fintrack-transaction-service
+
+heroku config:set KAFKA_SASL_USERNAME="<USERNAME>" --app fintrack-api-gateway
+heroku config:set KAFKA_SASL_PASSWORD="<PASSWORD>" --app fintrack-api-gateway
+heroku config:set KAFKA_SASL_USERNAME="<USERNAME>" --app fintrack-transaction-service
+heroku config:set KAFKA_SASL_PASSWORD="<PASSWORD>" --app fintrack-transaction-service
+```
+
+### 4) Configurar variáveis do API Gateway no Heroku
+
+```bash
+heroku config:set NODE_ENV=production --app fintrack-api-gateway
+heroku config:set JWT_SECRET="<SEGREDO_COM_32+_CARACTERES>" --app fintrack-api-gateway
+heroku config:set CORS_ORIGIN="https://<seu-projeto>.vercel.app" --app fintrack-api-gateway
+```
+
+O `PORT` é definido automaticamente pelo Heroku.
+
+### 5) Configurar variáveis do Transaction Service no Heroku
+
+```bash
+heroku config:set NODE_ENV=production --app fintrack-transaction-service
+heroku config:set JWT_SECRET="<SEGREDO_COM_32+_CARACTERES>" --app fintrack-transaction-service
+```
+
+### 6) Criar Secrets no GitHub
+
+No repositório, em **Settings > Secrets and variables > Actions**, crie:
+
+- `HEROKU_API_KEY`
+- `HEROKU_EMAIL`
+- `HEROKU_APP_NAME_API_GATEWAY`
+- `HEROKU_APP_NAME_TRANSACTION_SERVICE`
+- `HEROKU_DATABASE_URL` (usada na migration automática do Drizzle)
+- `JWT_SECRET`
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+- `VITE_API_URL` (URL pública do API Gateway no Heroku)
+
+### 7) Workflows disponíveis
+
+- Back-end Heroku: `.github/workflows/deploy-backend-heroku.yml`
+- Front-end Vercel: `.github/workflows/deploy-web-vercel.yml`
+
+Ao fazer push na `main`, os workflows fazem deploy automático.
+
 
 
 ---

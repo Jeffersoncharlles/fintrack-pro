@@ -80,3 +80,6 @@ data/
 # --- Outros ---
 # Se você usar o Vitest (comum com Vite) para testes financeiros
 coverage/
+
+# --- Local deploy scripts ---
+script.sh
