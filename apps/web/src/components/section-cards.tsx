@@ -25,8 +25,6 @@ export function SectionCards() {
 			const metrics = await getWalletMetricsMonthlySummary();
 			return metrics;
 		},
-		// Transferencias Pix sao processadas de forma assincrona no backend.
-		// O polling garante que os cards reflitam a saida logo apos a persistencia.
 		refetchInterval: 4000,
 		refetchIntervalInBackground: false,
 	});
@@ -42,9 +40,9 @@ export function SectionCards() {
 	});
 
 	const income =
-		metrics?.metrics.find((m) => m.type === "income")?.totalAmount ?? 0;
+		metrics?.metrics?.find((m) => m.type === "income")?.totalAmount ?? 0;
 	const outcome =
-		metrics?.metrics.find((m) => m.type === "outcome")?.totalAmount ?? 0;
+		metrics?.metrics?.find((m) => m.type === "outcome")?.totalAmount ?? 0;
 
 	const totalMovement = income + outcome;
 

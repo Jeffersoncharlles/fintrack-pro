@@ -131,6 +131,8 @@ docker-compose up -d
 pnpm dev
 ```
 
+No frontend, a variavel `VITE_API_URL` deve apontar para `/api`. Em desenvolvimento, o Vite faz proxy para `http://localhost:3333`; em producao, o rewrite do Vercel encaminha `/api/*` para o API Gateway.
+
 Aplicacoes locais:
 
 - Web: http://localhost:5173

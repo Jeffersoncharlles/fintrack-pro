@@ -25,17 +25,9 @@ function PrivateLayout() {
 
 export const Route = createFileRoute("/_private")({
 	beforeLoad: ({ context }) => {
-		console.log(
-			"[DEBUG] _private beforeLoad - isAuthenticated:",
-			context.auth.isAuthenticated,
-			"user:",
-			context.auth.user,
-		);
 		if (!context.auth.isAuthenticated) {
-			console.log("[DEBUG] Not authenticated, redirecting to /authenticate");
 			throw redirect({ to: "/authenticate" });
 		}
-		console.log("[DEBUG] Authenticated, allowing access to /_private");
 	},
 
 	component: PrivateLayout,
