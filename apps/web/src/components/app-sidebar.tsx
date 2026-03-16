@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
 	CameraIcon,
 	CircleHelpIcon,
@@ -33,7 +34,7 @@ const data = {
 		},
 		{
 			title: "Fazer Pix",
-			url: "/_private/pix-tranfere",
+			url: "/pix-tranfere",
 			icon: <ListIcon />,
 		},
 	],
@@ -121,10 +122,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							asChild
 							className="data-[slot=sidebar-menu-button]:p-1.5!"
 						>
-							<a href="/">
+							<Link to="/">
 								<CommandIcon className="size-5!" />
 								<span className="text-base font-semibold">FinTrack pro.</span>
-							</a>
+							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
