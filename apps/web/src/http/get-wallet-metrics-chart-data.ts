@@ -13,7 +13,5 @@ export const getWalletMetricsChartData =
 			"/wallets/metrics/chart-data",
 		);
 
-		console.log("getWalletMetricsChartData", data.data);
-
 		return data;
 	};

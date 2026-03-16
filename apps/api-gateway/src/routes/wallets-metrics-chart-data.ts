@@ -92,8 +92,6 @@ export const walletsMetricsChartData: FastifyPluginAsyncZod = async (
 				};
 			});
 
-			console.log("walletsMetricsChartData", chartData);
-
 			return response.send({
 				data: chartData,
 			});

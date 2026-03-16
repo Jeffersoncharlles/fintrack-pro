@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
+import { Navigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -24,8 +24,7 @@ export type AuthenticateFormDataSchema = z.infer<
 >;
 
 export function AuthenticatePage() {
-	const navigate = useNavigate();
-	const { signIn } = useAuth();
+	const { signIn, isAuthenticated } = useAuth();
 
 	const {
 		register,
@@ -39,12 +38,15 @@ export function AuthenticatePage() {
 		},
 	});
 
+	if (isAuthenticated) {
+		return <Navigate to="/" />;
+	}
+
 	const handleFormSubmit = async (data: AuthenticateFormDataSchema) => {
 		const result = await signIn(data);
 		if (!result.success) {
 			toast.error(result.error || "Failed to authenticate");
 		}
-		navigate({ to: "/" });
 	};
 
 	return (
@@ -88,8 +90,12 @@ export function AuthenticatePage() {
 							</Field>
 
 							<Field orientation="horizontal">
-								<Button disabled={isSubmitting} type="submit">
-									{isSubmitting ? "Authenticating..." : "Authenticate"}
+								<Button
+									className="cursor-pointer"
+									disabled={isSubmitting}
+									type="submit"
+								>
+									{isSubmitting ? "Autenticando..." : "Entrar"}
 								</Button>
 							</Field>
 						</FieldGroup>

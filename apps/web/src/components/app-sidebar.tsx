@@ -1,18 +1,13 @@
 import {
 	CameraIcon,
-	ChartBarIcon,
 	CircleHelpIcon,
 	CommandIcon,
 	DatabaseIcon,
-	FileChartColumnIcon,
-	FileIcon,
 	FileTextIcon,
-	FolderIcon,
 	LayoutDashboardIcon,
 	ListIcon,
 	SearchIcon,
 	Settings2Icon,
-	UsersIcon,
 } from "lucide-react";
 import type * as React from "react";
 import { NavDocuments } from "@/components/nav-documents";
@@ -38,28 +33,13 @@ const data = {
 	navMain: [
 		{
 			title: "Dashboard",
-			url: "#",
+			url: "/",
 			icon: <LayoutDashboardIcon />,
 		},
 		{
-			title: "Lifecycle",
-			url: "#",
+			title: "Fazer Pix",
+			url: "/pix-tranfere",
 			icon: <ListIcon />,
-		},
-		{
-			title: "Analytics",
-			url: "#",
-			icon: <ChartBarIcon />,
-		},
-		{
-			title: "Projects",
-			url: "#",
-			icon: <FolderIcon />,
-		},
-		{
-			title: "Team",
-			url: "#",
-			icon: <UsersIcon />,
 		},
 	],
 	navClouds: [
@@ -113,7 +93,7 @@ const data = {
 	navSecondary: [
 		{
 			title: "Settings",
-			url: "#",
+			url: "/settings-user",
 			icon: <Settings2Icon />,
 		},
 		{
@@ -129,19 +109,9 @@ const data = {
 	],
 	documents: [
 		{
-			name: "Data Library",
-			url: "#",
+			name: "Relatórios Mensais",
+			url: "/relatory-months",
 			icon: <DatabaseIcon />,
-		},
-		{
-			name: "Reports",
-			url: "#",
-			icon: <FileChartColumnIcon />,
-		},
-		{
-			name: "Word Assistant",
-			url: "#",
-			icon: <FileIcon />,
 		},
 	],
 };
@@ -170,7 +140,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser user={data.user} />
+				<NavUser />
 			</SidebarFooter>
 		</Sidebar>
 	);

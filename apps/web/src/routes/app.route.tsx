@@ -1,4 +1,5 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/contexts/auth-context";
 import { routeTree } from "@/routeTree.gen";
 
@@ -21,7 +22,7 @@ export const AppRouter = () => {
 	if (auth.loading) {
 		return (
 			<div className="flex h-screen items-center justify-center">
-				Carregando...
+				<Spinner className="h-12 w-12" />
 			</div>
 		);
 	}

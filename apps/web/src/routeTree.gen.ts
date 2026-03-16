@@ -13,6 +13,9 @@ import { Route as RoutesRouteImport } from './routes/routes'
 import { Route as AuthenticateRouteImport } from './routes/authenticate'
 import { Route as PrivateRouteImport } from './routes/_private'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
+import { Route as PrivateSettingsUserRouteImport } from './routes/_private/settings-user'
+import { Route as PrivateRelatoryMonthsRouteImport } from './routes/_private/relatory-months'
+import { Route as PrivatePixTranfereRouteImport } from './routes/_private/pix-tranfere'
 
 const RoutesRoute = RoutesRouteImport.update({
   id: '/routes',
@@ -33,15 +36,36 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PrivateRoute,
 } as any)
+const PrivateSettingsUserRoute = PrivateSettingsUserRouteImport.update({
+  id: '/settings-user',
+  path: '/settings-user',
+  getParentRoute: () => PrivateRoute,
+} as any)
+const PrivateRelatoryMonthsRoute = PrivateRelatoryMonthsRouteImport.update({
+  id: '/relatory-months',
+  path: '/relatory-months',
+  getParentRoute: () => PrivateRoute,
+} as any)
+const PrivatePixTranfereRoute = PrivatePixTranfereRouteImport.update({
+  id: '/pix-tranfere',
+  path: '/pix-tranfere',
+  getParentRoute: () => PrivateRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PrivateIndexRoute
   '/authenticate': typeof AuthenticateRoute
   '/routes': typeof RoutesRoute
+  '/pix-tranfere': typeof PrivatePixTranfereRoute
+  '/relatory-months': typeof PrivateRelatoryMonthsRoute
+  '/settings-user': typeof PrivateSettingsUserRoute
 }
 export interface FileRoutesByTo {
   '/authenticate': typeof AuthenticateRoute
   '/routes': typeof RoutesRoute
+  '/pix-tranfere': typeof PrivatePixTranfereRoute
+  '/relatory-months': typeof PrivateRelatoryMonthsRoute
+  '/settings-user': typeof PrivateSettingsUserRoute
   '/': typeof PrivateIndexRoute
 }
 export interface FileRoutesById {
@@ -49,14 +73,37 @@ export interface FileRoutesById {
   '/_private': typeof PrivateRouteWithChildren
   '/authenticate': typeof AuthenticateRoute
   '/routes': typeof RoutesRoute
+  '/_private/pix-tranfere': typeof PrivatePixTranfereRoute
+  '/_private/relatory-months': typeof PrivateRelatoryMonthsRoute
+  '/_private/settings-user': typeof PrivateSettingsUserRoute
   '/_private/': typeof PrivateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/authenticate' | '/routes'
+  fullPaths:
+    | '/'
+    | '/authenticate'
+    | '/routes'
+    | '/pix-tranfere'
+    | '/relatory-months'
+    | '/settings-user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/authenticate' | '/routes' | '/'
-  id: '__root__' | '/_private' | '/authenticate' | '/routes' | '/_private/'
+  to:
+    | '/authenticate'
+    | '/routes'
+    | '/pix-tranfere'
+    | '/relatory-months'
+    | '/settings-user'
+    | '/'
+  id:
+    | '__root__'
+    | '/_private'
+    | '/authenticate'
+    | '/routes'
+    | '/_private/pix-tranfere'
+    | '/_private/relatory-months'
+    | '/_private/settings-user'
+    | '/_private/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,14 +142,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRoute
     }
+    '/_private/settings-user': {
+      id: '/_private/settings-user'
+      path: '/settings-user'
+      fullPath: '/settings-user'
+      preLoaderRoute: typeof PrivateSettingsUserRouteImport
+      parentRoute: typeof PrivateRoute
+    }
+    '/_private/relatory-months': {
+      id: '/_private/relatory-months'
+      path: '/relatory-months'
+      fullPath: '/relatory-months'
+      preLoaderRoute: typeof PrivateRelatoryMonthsRouteImport
+      parentRoute: typeof PrivateRoute
+    }
+    '/_private/pix-tranfere': {
+      id: '/_private/pix-tranfere'
+      path: '/pix-tranfere'
+      fullPath: '/pix-tranfere'
+      preLoaderRoute: typeof PrivatePixTranfereRouteImport
+      parentRoute: typeof PrivateRoute
+    }
   }
 }
 
 interface PrivateRouteChildren {
+  PrivatePixTranfereRoute: typeof PrivatePixTranfereRoute
+  PrivateRelatoryMonthsRoute: typeof PrivateRelatoryMonthsRoute
+  PrivateSettingsUserRoute: typeof PrivateSettingsUserRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
+  PrivatePixTranfereRoute: PrivatePixTranfereRoute,
+  PrivateRelatoryMonthsRoute: PrivateRelatoryMonthsRoute,
+  PrivateSettingsUserRoute: PrivateSettingsUserRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

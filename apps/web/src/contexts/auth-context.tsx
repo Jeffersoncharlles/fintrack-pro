@@ -1,5 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { createContext, type ReactNode, useContext } from "react";
+import {
+	createContext,
+	type ReactNode,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { auth } from "@/http/auth";
 import { logout } from "@/http/logout";
 import { me } from "@/http/me";
@@ -32,19 +38,37 @@ export interface AuthContextType {
 const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const { data: user, isLoading: loading } = useQuery({
-		queryKey: ["profile"],
-		queryFn: async () => {
-			try {
-				const userData = await me();
-				return userData;
-			} catch {
-				return null;
+	const [user, setUser] = useState<User | null>(
+		() => queryClient.getQueryData<User | null>(["profile"]) ?? null,
+	);
+	const [loading, setLoading] = useState(true);
+
+	const loadProfileSession = useCallback(async (isMounted: () => boolean) => {
+		try {
+			const userData = await me();
+			if (isMounted()) {
+				setUser(userData);
+				queryClient.setQueryData(["profile"], userData);
 			}
-		},
-		staleTime: 1000 * 60 * 15, // 15 minutos,
-		retry: false,
-	});
+		} catch {
+			if (isMounted()) {
+				setUser(null);
+				queryClient.setQueryData(["profile"], null);
+			}
+		} finally {
+			if (isMounted()) {
+				setLoading(false);
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		let mounted = true;
+		void loadProfileSession(() => mounted);
+		return () => {
+			mounted = false;
+		};
+	}, [loadProfileSession]);
 
 	const isAuthenticated = !!user;
 
@@ -54,6 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	}: SignInCredentials): Promise<SignInResponse> {
 		const { user: loggedUser, error } = await auth({ email, password });
 		if (loggedUser) {
+			setUser(loggedUser);
 			queryClient.setQueryData(["profile"], loggedUser);
 			return { success: true };
 		}
@@ -64,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		try {
 			await logout();
 		} finally {
+			setUser(null);
 			queryClient.setQueryData(["profile"], null);
 		}
 	}
