@@ -5,14 +5,14 @@
   "outputDirectory": "dist",
   "devCommand": "pnpm --filter web dev",
   "framework": "vite",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://fintrack-api-gateway-7863ff635595.herokuapp.com/$1"
+      "source": "/api/:path*",
+      "destination": "https://fintrack-api-gateway-7863ff635595.herokuapp.com/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
