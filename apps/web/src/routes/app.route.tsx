@@ -1,12 +1,21 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { Spinner } from "@/components/ui/spinner";
-import { useAuth } from "@/contexts/auth-context";
+import { type AuthContextType, useAuth } from "@/contexts/auth-context";
 import { routeTree } from "@/routeTree.gen";
 
 const router = createRouter({
 	routeTree,
 	context: {
-		auth: undefined!,
+		auth: {
+			user: null,
+			isAuthenticated: false,
+			loading: true,
+			signIn: async () => ({
+				success: false,
+				error: "Auth context not initialized",
+			}),
+			signOut: async () => {},
+		} satisfies AuthContextType,
 	},
 });
 
