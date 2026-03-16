@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { isAxiosError } from "axios";
 import { ArrowRight, Copy, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,11 @@ export function PixTransferPage() {
 	const navigate = useNavigate();
 	const formatCurrencyFromCents = useFormatCurrencyFromCents();
 	const amountDisplay = formatCurrencyFromCents(amountInCents);
+
+	// Debug: log quando a página é carregada
+	useEffect(() => {
+		console.log("[DEBUG] PixTransferPage loaded, user:", user);
+	}, [user]);
 
 	const {
 		data: receiver,
