@@ -33,7 +33,7 @@ const data = {
 		},
 		{
 			title: "Fazer Pix",
-			url: "/pix-tranfere",
+			url: "/_private/pix-tranfere",
 			icon: <ListIcon />,
 		},
 	],
