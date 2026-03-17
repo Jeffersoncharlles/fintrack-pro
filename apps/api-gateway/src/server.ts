@@ -55,10 +55,27 @@ app.register(fastifyJwt, {
 
 app.register(routes);
 
-const start = async () => {
+const KAFKA_RETRY_INTERVAL_MS = 15_000;
+
+const connectKafkaWithRetry = async () => {
 	try {
 		await connectKafka();
+	} catch (error) {
+		app.log.error(
+			{ error, retryInMs: KAFKA_RETRY_INTERVAL_MS },
+			"Kafka connection failed. Retrying in background.",
+		);
+
+		setTimeout(() => {
+			void connectKafkaWithRetry();
+		}, KAFKA_RETRY_INTERVAL_MS);
+	}
+};
+
+const start = async () => {
+	try {
 		await app.listen({ port: env.PORT, host: "0.0.0.0" });
+		void connectKafkaWithRetry();
 	} catch (error) {
 		app.log.error(error);
 		process.exit(1);

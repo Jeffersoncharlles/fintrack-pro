@@ -32,20 +32,36 @@ const parseBoolean = (value: unknown, fallback: boolean) => {
   return fallback
 }
 
+const normalizeKafkaBroker = (value: string) =>
+  value
+    .trim()
+    .replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '')
+    .replace(/^\/+/, '')
+
+const normalizeKafkaBrokers = (value: string) =>
+  value
+    .split(',')
+    .map((broker) => normalizeKafkaBroker(broker))
+    .filter(Boolean)
+    .join(',')
+
 const resolveKafkaBrokers = () => {
-  return (
+  const raw =
     process.env.KAFKA_BROKERS ??
     process.env.CLOUDKARAFKA_BROKERS ??
     process.env.KAFKACLUSTER_BROKERS ??
+    process.env.AIVEN_KAFKA_BROKERS ??
     'localhost:9093'
-  )
+
+  return normalizeKafkaBrokers(raw)
 }
 
 const resolveKafkaSaslUsername = () => {
   return (
     process.env.KAFKA_SASL_USERNAME ??
     process.env.CLOUDKARAFKA_USERNAME ??
-    process.env.KAFKACLUSTER_USERNAME
+    process.env.KAFKACLUSTER_USERNAME ??
+    process.env.AIVEN_KAFKA_USERNAME
   )
 }
 
@@ -53,7 +69,8 @@ const resolveKafkaSaslPassword = () => {
   return (
     process.env.KAFKA_SASL_PASSWORD ??
     process.env.CLOUDKARAFKA_PASSWORD ??
-    process.env.KAFKACLUSTER_PASSWORD
+    process.env.KAFKACLUSTER_PASSWORD ??
+    process.env.AIVEN_KAFKA_PASSWORD
   )
 }
 
@@ -70,6 +87,40 @@ const resolveKafkaSaslMechanism = () => {
   return 'plain'
 }
 
+const resolveKafkaSslDefault = () => {
+  const explicit = process.env.KAFKA_SSL
+  if (explicit !== undefined) {
+    return parseBoolean(explicit, false)
+  }
+
+  const brokers = resolveKafkaBrokers()
+  const brokerLooksSecure = brokers
+    .split(',')
+    .some((broker) => broker.endsWith(':9094'))
+
+  const hasManagedKafkaCredentials =
+    Boolean(process.env.CLOUDKARAFKA_USERNAME) ||
+    Boolean(process.env.CLOUDKARAFKA_PASSWORD) ||
+    Boolean(process.env.KAFKACLUSTER_USERNAME) ||
+    Boolean(process.env.KAFKACLUSTER_PASSWORD)
+
+  return brokerLooksSecure || hasManagedKafkaCredentials
+}
+
+const resolveKafkaRejectUnauthorizedDefault = () => {
+  if (process.env.KAFKA_SSL_REJECT_UNAUTHORIZED !== undefined) {
+    return parseBoolean(process.env.KAFKA_SSL_REJECT_UNAUTHORIZED, true)
+  }
+
+  // Managed Kafka providers may use non-public CA chains.
+  // If no custom CA is provided, default to a permissive mode.
+  if (!process.env.KAFKA_SSL_CA) {
+    return false
+  }
+
+  return true
+}
+
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z
@@ -80,10 +131,24 @@ const envSchema = z.object({
   // ──────────────────────────────────────────
   // Kafka
   // ──────────────────────────────────────────
-  KAFKA_BROKERS: z.string().default(resolveKafkaBrokers()),
+  KAFKA_BROKERS: z
+    .preprocess(
+      (value) =>
+        value === undefined || value === null
+          ? resolveKafkaBrokers()
+          : normalizeKafkaBrokers(String(value)),
+      z.string(),
+    )
+    .default(resolveKafkaBrokers()),
   KAFKA_SSL: z
     .preprocess((value) => parseBoolean(value, false), z.boolean())
-    .default(parseBoolean(process.env.KAFKA_SSL, false)),
+    .default(resolveKafkaSslDefault()),
+  KAFKA_SSL_REJECT_UNAUTHORIZED: z
+    .preprocess(
+      (value) => parseBoolean(value, resolveKafkaRejectUnauthorizedDefault()),
+      z.boolean(),
+    )
+    .default(resolveKafkaRejectUnauthorizedDefault()),
   KAFKA_SASL_USERNAME: z
     .string()
     .optional()
@@ -100,6 +165,10 @@ const envSchema = z.object({
         | 'scram-sha-256'
         | 'scram-sha-512',
     ),
+  KAFKA_TOPIC_PREFIX: z.string().default(process.env.KAFKA_TOPIC_PREFIX ?? ''),
+  KAFKA_SSL_CERT: z.string().optional(),
+  KAFKA_SSL_KEY: z.string().optional(),
+  KAFKA_SSL_CA: z.string().optional(),
   KAFKA_INTERNAL_BROKERS: z.string().default('kafka:29092'),
   ZOOKEEPER_CONNECT: z.string().default('localhost:2181'),
   CORS_ORIGIN: z.string().url().default('http://localhost:5173'),

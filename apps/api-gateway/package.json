@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "tsx watch src/server.ts",
 		"start": "tsx src/server.ts",
+		"kafka:setup": "tsx src/scripts/kafka-setup.ts",
 		"typecheck": "tsc -p tsconfig.json --noEmit",
 		"build": "tsc -p tsconfig.node.json",
 		"lint": "biome check .",

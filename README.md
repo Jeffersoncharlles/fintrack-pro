@@ -14,8 +14,8 @@ FinTrack Pro e uma simulacao de arquitetura de fintech para gestao financeira pe
 ## Preview
 
 - Web (Vercel): https://fintrack-pro-web.vercel.app/ 
-- API (Heroku): https://fintrack-api-gateway-7863ff635595.herokuapp.com
-- Documentacao da API (Scalar): https://fintrack-api-gateway-7863ff635595.herokuapp.com/docs
+- API (Heroku): https://fintrack-api-gateway-8f7b3af11c7f.herokuapp.com
+- Documentacao da API (Scalar): https://fintrack-api-gateway-8f7b3af11c7f.herokuapp.com/docs
 
 ## Screens
 

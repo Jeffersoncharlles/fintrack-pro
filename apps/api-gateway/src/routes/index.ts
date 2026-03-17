@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { auth } from "./auth";
 import { createUser } from "./create-user";
+import { healthKafka } from "./health-kafka";
 import { logout } from "./logout";
 import { me } from "./me";
 import { walletsUser } from "./wallets";
@@ -13,6 +14,7 @@ import { walletsPixTransfer } from "./wallets-pix-transfer";
 
 export const routes: FastifyPluginAsyncZod = async (app: FastifyInstance) => {
 	app.register(auth, { prefix: "/auth/authenticate" });
+	app.register(healthKafka, { prefix: "/health/kafka" });
 	app.register(logout, { prefix: "/auth/logout" });
 	app.register(createUser, { prefix: "/auth/create" });
 	app.register(me, { prefix: "/auth/me" });

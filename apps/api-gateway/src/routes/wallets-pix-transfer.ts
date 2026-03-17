@@ -1,7 +1,7 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { producer } from "@/lib/kafka";
+import { producer, topicName } from "@/lib/kafka";
 import { authenticate } from "@/middlewares/authenticate";
 
 const walletsPixTransferBodySchema = z.object({
@@ -21,16 +21,20 @@ export const walletsPixTransfer: FastifyPluginAsyncZod = async (
 					"get wallet pix transfer of the currently authenticated user",
 				tags: ["payments"],
 				body: walletsPixTransferBodySchema,
-				// response: {
-				// 	200: z.object({
-				// 		incomeInCents: z.string().uuid(),
-				// 		expenseInCents: z.number(),
-				// 		month: z.coerce.date(),
-				// 	}),
-				// 	404: z.object({
-				// 		message: z.string(),
-				// 	}),
-				// },
+				response: {
+					202: z.object({
+						message: z.string(),
+						transactionId: z.string().uuid(),
+					}),
+					401: z.object({
+						message: z.string(),
+					}),
+					502: z.object({
+						message: z.string(),
+						error: z.string(),
+						transactionId: z.string().uuid(),
+					}),
+				},
 			},
 			preHandler: [authenticate],
 		},
@@ -45,7 +49,7 @@ export const walletsPixTransfer: FastifyPluginAsyncZod = async (
 
 			try {
 				await producer.send({
-					topic: "transfer.requested",
+					topic: topicName("transfer.requested"),
 					messages: [
 						{
 							key: senderId,
@@ -64,9 +68,26 @@ export const walletsPixTransfer: FastifyPluginAsyncZod = async (
 					transactionId,
 				});
 			} catch (error) {
-				app.log.error(error);
-				return response.status(500).send({
-					message: "Ocorreu um erro ao tentar processar sua transferência.",
+				const kafkaError = error as {
+					name?: string;
+					message?: string;
+					type?: string;
+					retriable?: boolean;
+				};
+
+				app.log.error({
+					transactionId,
+					senderId,
+					receiverWalletId,
+					amountInCents,
+					kafkaError,
+				});
+
+				return response.status(502).send({
+					message: "Falha ao publicar a transferência para processamento.",
+					error:
+						kafkaError.message || kafkaError.name || "Kafka publish failed",
+					transactionId,
 				});
 			}
 		},
