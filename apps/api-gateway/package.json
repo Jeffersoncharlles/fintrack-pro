@@ -1,44 +1,39 @@
 {
-	"name": "api-gateway",
-	"version": "1.0.0",
-	"description": "",
-	"main": "server.js",
-	"scripts": {
-		"dev": "tsx watch src/server.ts",
-		"start": "tsx src/server.ts",
-		"kafka:setup": "tsx src/scripts/kafka-setup.ts",
-		"typecheck": "tsc -p tsconfig.json --noEmit",
-		"build": "tsc -p tsconfig.node.json",
-		"lint": "biome check .",
-		"lint:fix": "biome check --write ."
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.30.0",
-	"dependencies": {
-		"@fastify/cookie": "^11.0.2",
-		"@fastify/cors": "^11.2.0",
-		"@fastify/jwt": "^10.0.0",
-		"@fastify/swagger": "^9.7.0",
-		"@fintrack-pro/db": "workspace:*",
-		"@fintrack-pro/env": "workspace:*",
-		"@fintrack-pro/types": "workspace:*",
-		"@scalar/fastify-api-reference": "^1.48.5",
-		"bcrypt": "^6.0.0",
-		"date-fns": "^4.1.0",
-		"fastify": "^5.8.2",
-		"fastify-type-provider-zod": "^6.1.0",
-		"kafkajs": "^2.2.4",
-		"zod": "^4.3.6"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.4.6",
-		"@fintrack-pro/biome-config": "workspace:*",
-		"@fintrack-pro/tsconfig": "workspace:*",
-		"@types/bcrypt": "^6.0.0",
-		"@types/node": "^24.12.0",
-		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
-	}
+  "name": "api-gateway",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "biome format --write .",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/platform-express": "^11.0.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@fintrack-pro/tsconfig": "workspace:*",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  }
 }

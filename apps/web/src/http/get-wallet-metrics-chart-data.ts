@@ -1,17 +1,17 @@
-import { api } from "@/lib/axios";
+import { api } from '@/lib/axios'
 
 interface GetWalletMetricsChartDataResponse {
-	data: {
-		date: string;
-		income: number;
-		expense: number;
-	}[];
+  data: {
+    date: string
+    income: number
+    expense: number
+  }[]
 }
 export const getWalletMetricsChartData =
-	async (): Promise<GetWalletMetricsChartDataResponse | null> => {
-		const { data } = await api.get<GetWalletMetricsChartDataResponse>(
-			"/wallets/metrics/chart-data",
-		);
+  async (): Promise<GetWalletMetricsChartDataResponse | null> => {
+    const { data } = await api.get<GetWalletMetricsChartDataResponse>(
+      '/wallets/metrics/chart-data',
+    )
 
-		return data;
-	};
+    return data
+  }

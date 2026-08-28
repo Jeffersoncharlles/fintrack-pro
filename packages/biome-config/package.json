@@ -9,8 +9,8 @@
     "react.json"
   ],
   "exports": {
-    "./base.json": "./base.json",
-    "./node.json": "./node.json",
-    "./react.json": "./react.json"
+    "./base": "./base.json",
+    "./node": "./node.json",
+    "./react": "./react.json"
   }
 }

@@ -5,6 +5,7 @@ node_modules/
 .pnpm-debug.log
 pnpm-debug.log
 
+api-/**
 
 
 # --- Builds e Saídas ---

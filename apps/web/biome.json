@@ -1,7 +1,0 @@
-{
-	"root": false,
-	"extends": ["@fintrack-pro/biome-config/react.json"],
-	"files": {
-		"includes": ["**", "!src/routeTree.gen.ts"]
-	}
-}

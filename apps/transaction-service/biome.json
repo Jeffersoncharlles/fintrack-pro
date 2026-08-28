@@ -1,4 +1,0 @@
-{
-	"root": false,
-	"extends": ["@fintrack-pro/biome-config/node.json"]
-}
