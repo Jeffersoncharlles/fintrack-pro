@@ -6,7 +6,7 @@ node_modules/
 pnpm-debug.log
 
 api-/**
-
+docs/zod.md
 
 # --- Builds e Saídas ---
 dist

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { ThrottlerModule } from '@nestjs/throttler'
-import { CircurtBreakerModule } from './common/circurt-breaker/circurt-breaker.module'
-import { FallbackModule } from './common/fallback/fallback.module'
-import { HealthModule } from './common/health/health.module'
-import { AuthModule } from './domain/auth/auth.module'
-import { ProxyModule } from './domain/proxy/proxy.module'
+import { CircurtBreakerModule } from './common/circurt-breaker/circurt-breaker.module.js'
+import { FallbackModule } from './common/fallback/fallback.module.js'
+import { HealthModule } from './common/health/health.module.js'
+import { AuthModule } from './domain/auth/auth.module.js'
+import { ProxyModule } from './domain/proxy/proxy.module.js'
 
 @Module({
   imports: [

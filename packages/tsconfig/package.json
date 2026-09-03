@@ -4,11 +4,13 @@
   "private": true,
   "files": [
     "base.json",
+    "nestjs.json",
     "node.json",
     "react.json"
   ],
   "exports": {
     "./base.json": "./base.json",
+    "./nestjs.json": "./nestjs.json",
     "./node.json": "./node.json",
     "./react.json": "./react.json"
   }

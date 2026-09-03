@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { HealthService } from './health.service'
+import { HealthService } from './health.service.js'
 
 @Module({
   providers: [HealthService],

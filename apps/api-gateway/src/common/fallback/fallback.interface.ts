@@ -1,1 +1,1 @@
-export interface Fallback {}
+export type Fallback = object

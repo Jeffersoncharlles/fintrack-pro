@@ -1,1 +1,1 @@
-export type Health = {}
+export type Health = object

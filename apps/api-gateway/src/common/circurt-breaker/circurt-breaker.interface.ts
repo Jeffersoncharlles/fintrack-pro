@@ -1,1 +1,1 @@
-export type CircurtBreaker = {}
+export type CircurtBreaker = object
