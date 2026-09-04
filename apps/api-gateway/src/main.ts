@@ -4,12 +4,12 @@ import { SwaggerModule } from '@nestjs/swagger'
 import helmet from 'helmet'
 import { AppModule } from './app.module.js'
 import { CorsConfig } from './config/cors.config.js'
-import { HelmetConfig } from './config/helmet.config.ts'
+import { HelmetConfig } from './config/helmet.config.js'
 import {
   documentOptions,
   SwaggerConfig,
   SwaggerOptions,
-} from './config/swagger.config.ts'
+} from './config/swagger.config.js'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

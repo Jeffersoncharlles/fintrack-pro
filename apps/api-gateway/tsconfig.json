@@ -2,8 +2,10 @@
   "extends": "@fintrack-pro/tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "allowImportingTsExtensions": false,
+    "rewriteRelativeImportExtensions": false,
     "paths": {
-      "@src/*": ["./src/*"]
+      "#src/*": ["./src/*"]
     }
   }
 }

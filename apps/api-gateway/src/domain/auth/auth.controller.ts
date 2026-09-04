@@ -1,10 +1,13 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
-import { ApiOperation } from '@nestjs/swagger'
-import type { AuthService } from './auth.service.ts'
+import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { AuthService } from './auth.service.js'
 import {
   AuthenticateDto,
   type AuthenticateDtoType,
-} from './dtos/authenticate.dto.ts'
+  AuthResponseSchema,
+  type CreateUserBody,
+  CreateUserBodySchema,
+} from './dtos/authenticate.dto.js'
 
 @Controller('auth')
 export class AuthController {
@@ -13,11 +16,26 @@ export class AuthController {
   @Post('authenticate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Authenticate user and return access token' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User authenticated successfully',
+    standardSchema: AuthResponseSchema,
+  })
   async authenticate(
     @Body({ schema: AuthenticateDto }) body: AuthenticateDtoType,
   ) {
-    // Implement your authentication logic here
-    return  this.authService.authenticate(body)
+    return await this.authService.authenticate(body)
+  }
 
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'User registered successfully',
+    standardSchema: AuthResponseSchema,
+  })
+  async register(@Body({ schema: CreateUserBodySchema }) body: CreateUserBody) {
+    return await this.authService.register(body)
   }
 }
